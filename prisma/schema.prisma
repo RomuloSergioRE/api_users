@@ -1,0 +1,41 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+// schema.prisma
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  password     String
+  description  String?
+  status       Status   @default(ACTIVE)
+  role         Role     @default(CLIENT) 
+  createdAt    DateTime @default(now())
+  posts        Post[]
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  content   String
+  createdAt DateTime @default(now())
+  
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+}
+
+enum Role {
+  ADM
+  CLIENT
+}
