@@ -5,19 +5,6 @@ import { Request, Response } from "express";
 const userService = new UserService();
 
 export class UserController {
-
-    handleCreate = async (req: Request, res: Response) =>{
-        try {
-            const data: Prisma.UserCreateInput = req.body;
-            const newUser = await userService.registerUser(data);
-
-            const { password, ...userWithoutPassword } = newUser as any;
-
-            return res.status(201).json(userWithoutPassword);
-        } catch (error: any) {
-            return res.status(400).json({error: error.message})  
-        }
-    }
     handleUserByEmail = async (req: Request, res: Response) => {
        try {
             const {email} = req.params;
@@ -59,8 +46,13 @@ export class UserController {
     handleListAll = async (_req: Request, res: Response) => {
         try {
             const users = await userService.listAllUsers();
-            const usersWithoutPassword = users.map(({ password, ...rest }: any) => rest);
-            return res.json(usersWithoutPassword);
+            const sanitizedUsers = users.map(user => ({
+                id: user.id,
+                name: user.name,
+                role: user.role,
+                status: user.status
+            }));
+            return res.json(sanitizedUsers);
         } catch (error: any) {
             return res.status(500).json({ error: error.message });
         }

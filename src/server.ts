@@ -1,4 +1,3 @@
-// src/server.ts
 import 'dotenv/config';
 import express from 'express';
 import routes from './routes/routes';
@@ -8,5 +7,5 @@ app.use(express.json());
 
 app.use(routes);
 
-const PORT = 3000;
+const PORT = process.env.PORT;
 app.listen(PORT, () => console.log(`🚀 Server rodando na porta ${PORT}`));
