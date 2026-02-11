@@ -27,31 +27,6 @@ Esta é uma API desenvolvida para estudo e aplicação de conceitos modernos de 
 - **Usuários:** Criação, listagem, atualização e exclusão com proteção de privacidade (senhas nunca são retornadas nas respostas).
 - **Posts:** Sistema de postagens vinculado diretamente ao ID do usuário autenticado através de chaves estrangeiras.
 
----
-
-## 🚀 Como Executar o Projeto
-
-Siga os passos abaixo para rodar o projeto localmente:
-
-1. **Clone o repositório:**
-   git clone https://github.com/seu-usuario/seu-repositorio.git
-
-2. **Instale as dependências:**
-   npm install
-
-3. **Configure as Variáveis de Ambiente:**
-   Crie um arquivo .env na raiz do projeto e adicione suas credenciais:
-   DATABASE_URL="postgresql://usuario:senha@localhost:5432/nome_do_banco"
-   JWT_SECRET="sua_chave_secreta_aqui"
-
-4. **Prepare o Banco de Dados:**
-   npx prisma migrate dev
-
-5. **Inicie o servidor de desenvolvimento:**
-   npm run dev
-
----
-
 ## 📈 Próximos Passos (Roadmap)
 
 Atividades planejadas para as próximas etapas do projeto:
