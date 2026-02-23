@@ -3,12 +3,12 @@ import { UserRepository } from "../repositories/userRepository";
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
-const repo = new UserRepository();
-
 export class UserService {
 
+    constructor(private userRepository = new UserRepository()) {}
+
     async signUp(data: Prisma.UserCreateInput) {
-        const isExist = await repo.findByEmail(data.email);
+        const isExist = await this.userRepository.findByEmail(data.email);
 
         if(isExist){
             throw new Error("usuario ja tem um email cadastrado");
@@ -21,10 +21,10 @@ export class UserService {
             password: hashedPassword
         }
 
-        return await repo.create(userData);
+        return await this.userRepository.create(userData);
     }
     async signIn(email: string, password: string) {
-        const user = await repo.findByEmail(email);
+        const user = await this.userRepository.findByEmail(email);
     
         if (!user) {
             throw new Error("E-mail ou senha incorretos.");
@@ -48,7 +48,7 @@ export class UserService {
     }
 
     async getUserByEmail(email: string) {
-        const user = await repo.findByEmail(email);
+        const user = await this.userRepository.findByEmail(email);
 
         if(!user){
             throw new Error("usuario não esta cadastrado");
@@ -58,7 +58,7 @@ export class UserService {
     }   
 
     async getUserById(id: number) {
-        const user = await repo.findById(id);
+        const user = await this.userRepository.findById(id);
 
         if(!user){
             throw new Error("usuario não encontrado");
@@ -67,7 +67,7 @@ export class UserService {
         return user;
     }   
     async updateUser(id: number, data: Prisma.UserUpdateInput): Promise<User> {
-        const user = await repo.findById(id);
+        const user = await this.userRepository.findById(id);
 
         if(!user){
             throw new Error("usuario não encontrado");
@@ -75,18 +75,18 @@ export class UserService {
         if (data.password && typeof data.password === 'string') {
             data.password = await bcrypt.hash(data.password, 10);
         }
-        return await repo.update(id, data);
+        return await this.userRepository.update(id, data);
     }   
     async deleteUser(id: number): Promise<User> {
-        const user = await repo.findById(id);
+        const user = await this.userRepository.findById(id);
 
         if(!user){
             throw new Error("usuario não encontrado");
         }
-        return await repo.delete(id);
+        return await this.userRepository.delete(id);
     }
 
     async listAllUsers(): Promise<User[]> {
-        return await repo.findAll();
+        return await this.userRepository.findAll();
     }
 }

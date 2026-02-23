@@ -2,23 +2,25 @@ import { Post, Prisma, User } from "@prisma/client";
 import { PostRepository } from "../repositories/postRepository";
 import { UserRepository } from "../repositories/userRepository";
 
-const repo = new PostRepository();
-const userRepository = new UserRepository();
-
 export class PostService {
+
+    constructor(
+        private postRepository = new PostRepository(),
+        private userRepository = new UserRepository()
+    ) {}
 
     async registerPost(data: Prisma.PostUncheckedCreateInput) {
 
-        const author = await userRepository.findById(data.authorId);
+        const author = await this.userRepository.findById(data.authorId);
 
         if(!author){
             throw new Error("Autor não encontrado.");
         }
 
-        return await repo.create(data);
+        return await this.postRepository.create(data);
     }
     async getPostById(id: number) {
-        const post = await repo.findById(id);
+        const post = await this.postRepository.findById(id);
 
         if(!post){
             throw new Error("post não encontrado");
@@ -27,24 +29,24 @@ export class PostService {
         return post;
     }   
     async updatePost(id: number, data: Prisma.PostUpdateInput): Promise<Post> {
-        const post = await repo.findById(id);
+        const post = await this.postRepository.findById(id);
 
         if(!post){
             throw new Error("post não encontrado");
         }
 
-        return await repo.update(id, data);
+        return await this.postRepository.update(id, data);
     }   
     async deletePost(id: number): Promise<Post> {
-        const post = await repo.findById(id);
+        const post = await this.postRepository.findById(id);
 
         if(!post){
             throw new Error("post não encontrado");
         }
-        return await repo.delete(id);
+        return await this.postRepository.delete(id);
     }
 
     async listPosts(): Promise<Post[]> {
-        return await repo.findAll();
+        return await this.postRepository.findAll();
     }
 }
