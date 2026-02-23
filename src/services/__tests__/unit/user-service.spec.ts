@@ -1,4 +1,4 @@
-import { UserService } from '../userService';
+import { UserService } from '../../userService';
 import bcrypt from 'bcrypt';
 
 describe('UserService Unit Tests', () => {

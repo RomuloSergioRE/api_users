@@ -1,4 +1,4 @@
-import { PostService } from '../postService';
+import { PostService } from '../../postService';
 
 describe('PostService Unit Tests', () => {
   // Criamos os dois mocks
